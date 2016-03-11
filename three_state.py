@@ -53,10 +53,10 @@ def declare_observables():
     Observable("Obs_A", A)
     Observable("Obs_B", B)
     Observable("Obs_C", C)
-    #Observable("Obs_AB", A+B)
-    #Observable("Obs_BC", B+C)
-    #Observable("Obs_AC", A+C)
-    #Observable("Obs_All", A+B+C)
+    Observable("Obs_AB", A() + B())
+    Observable("Obs_BC", B() + C())
+    Observable("Obs_AC", A() + C())
+    Observable("Obs_All", A() + B() + C())
 
 def declare_functions():
     
