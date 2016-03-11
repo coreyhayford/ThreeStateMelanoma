@@ -3,7 +3,7 @@ from pysb.util import *
 from pysb.macros import *
 from pysb.bng import *
 from pysb.integrate import odesolve
-#import pylab as pl
+import pylab as pl
 from numpy import linspace
 from sympy import sympify
 
@@ -18,9 +18,9 @@ def declare_parameters():
     
     ### Initial Conditions ###
     
-    Parameter("A_0", 2000)
+    Parameter("A_0", 0)
     Parameter("B_0", 2000)
-    Parameter("C_0", 2000)
+    Parameter("C_0", 0)
     
     ### Growth Parameters ###
     #Parameter("k_dip_A", -0.033)

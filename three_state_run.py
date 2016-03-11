@@ -49,22 +49,10 @@ print len(model.species)
 #quit()
 
 
-t = linspace(0,8000, 800)
+t = linspace(0, 1000, 100)
 
 y = odesolve(model,t,verbose=True)
 
-plt.figure()
-for obs in ["Obs_A", "Obs_B", "Obs_C"]:
-    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-plt.legend(loc=0, prop={'size': 16})
-plt.xlabel("Time", fontsize=22)
-plt.ylabel("Cell Population", fontsize=22)
-plt.xticks(fontsize=18)
-plt.yticks(fontsize=18)
-plt.title("Three-State Model", fontsize=22)
-
-plt.show()
-quit() 
  
 plt.figure()
 
@@ -78,5 +66,25 @@ plt.yticks(fontsize=18)
 plt.title("Three-State Model", fontsize=22)
 
 plt.show()
+plt.savefig("three_state_model", format= "png")
 
-#pl.savefig("three_state_model", format= "png")
+
+plt.figure()
+
+fig, ax = plt.subplots()
+ax.set_yscale('log', basey=2)
+ax.plot(range(1000))
+
+for obs in ["Obs_A", "Obs_B", "Obs_C"]:
+    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+
+
+plt.legend(loc=0, prop={'size': 16})
+plt.xlabel("Time", fontsize=22)
+plt.ylabel("Cell Population log2", fontsize=22)
+plt.xticks(fontsize=18)
+plt.yticks(fontsize=18)
+plt.title("Three-State Model", fontsize=22)
+
+
+plt.show()
