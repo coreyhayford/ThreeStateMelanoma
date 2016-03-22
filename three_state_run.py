@@ -68,10 +68,10 @@ y = odesolve(model,t,verbose=True)
  
 plt.figure()
 
-for obs in ["Obs_A", "Obs_B", "Obs_C"]:
-    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
-    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+#for obs in ["Obs_A", "Obs_B", "Obs_C"]:
+#    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+#for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
+#    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
 plt.plot(t, y["Obs_A"]+y["Obs_B"]+y["Obs_C"], 'k--', lw=3, label="Total")
 plt.legend(loc=0, prop={'size': 16})
 plt.xlabel("Time", fontsize=22)
@@ -90,10 +90,10 @@ plt.figure()
 # ax.set_yscale('log', basey=2)
 # ax.plot(range(100))
 
-for obs in ["Obs_A", "Obs_B", "Obs_C"]:
-    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
-    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+#for obs in ["Obs_A", "Obs_B", "Obs_C"]:
+#    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+#for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
+#    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
 plt.plot(t, y["Obs_A"]+y["Obs_B"]+y["Obs_C"], 'k--', lw=3, label="Total")
 plt.yscale('log', basey=2)
 plt.legend(loc=0, prop={'size': 16})
