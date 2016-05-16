@@ -6,6 +6,7 @@ from pysb.core import *
 from pysb.integrate import odesolve
 from pylab import *
 import pylab as pl
+import numpy as np
 from numpy import linspace
 from sympy import sympify
 from scipy import constants 
@@ -49,7 +50,7 @@ print BngGenerator(model).get_content()
 for i in range(len(model.odes)):
     print str(i)+":", model.odes[i]
 
-#quit()
+quit()
 
 
 
@@ -72,7 +73,7 @@ plt.figure()
 #    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
 #for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
 #    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-plt.plot(t, y["Obs_A"]+y["Obs_B"]+y["Obs_C"], 'k--', lw=3, label="Total")
+plt.plot(t, y["Obs_AC"], 'k--', lw=3, label="Total")
 plt.legend(loc=0, prop={'size': 16})
 plt.xlabel("Time", fontsize=22)
 plt.ylabel("Cell Population", fontsize=22)
@@ -94,15 +95,25 @@ plt.figure()
 #    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
 #for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
 #    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-plt.plot(t, y["Obs_A"]+y["Obs_B"]+y["Obs_C"], 'k--', lw=3, label="Total")
-plt.yscale('log', basey=2)
-plt.legend(loc=0, prop={'size': 16})
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'b--', lw=3, label="1:1:1")
+#plt.yscale('log', basey=2)
+
 plt.xlabel("Time", fontsize=22)
 plt.ylabel("Cell Population log2", fontsize=22)
 plt.xticks(fontsize=18)
 plt.yticks(fontsize=18)
 plt.title("Three-State Model", fontsize=22)
 
-plt.savefig("three_state_model_mix_log2.pdf", format= "pdf")
+#########
+
+model.parameters["A_0"].value = 600
+model.parameters["B_0"].value = 1800
+model.parameters["C_0"].value = 600
+
+y = odesolve(model, t, verbose=True)
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'r--', lw=3, label="1:3:1")
+plt.legend(loc=0, prop={'size': 16})
+
+#plt.savefig("three_state_model_mix_log2.pdf", format= "pdf")
 
 plt.show()
