@@ -18,7 +18,7 @@ Next Steps: To create a multi-objective parameter estimation function in PySB
 Implemented by: Corey E. Hayford and Leonard A. Harris (Vito Quaranta Lab, Vanderbilt University)
 
 """
-
+ 
 ### Import necessary python packages ###
 
 import pandas as pd
@@ -34,7 +34,7 @@ from pysb import *
 from pysb.integrate import Solver
 
 ### Import Model ###
-import three_state_dip as three_state
+import three_state_DIPrate as three_state
 
 ### Create new model -- call functions in previous model ###
 Model()  
@@ -44,8 +44,6 @@ three_state.declare_parameters()
 three_state.declare_initial_conditions()
 three_state.declare_observables()
 three_state.declare_functions()
-
-
 
 
 ####################################################################################################
@@ -89,7 +87,7 @@ for i,m in enumerate(mixing):
 
     nl2_average.append((nl2_rep1 + nl2_rep2 + nl2_rep3) / 3.0)
     
-    plt.figure()
+    plt.figure(i)
     
     plt.plot(time, nl2_average[-1], ms = 0.50, mfc = "0.25")
     
