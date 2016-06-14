@@ -34,7 +34,7 @@ from pysb import *
 from pysb.integrate import Solver
 
 ### Import Model ###
-import three_state_DIPrate as three_state
+import three_state_dip as three_state
 
 ### Create new model -- call functions in previous model ###
 Model()  
