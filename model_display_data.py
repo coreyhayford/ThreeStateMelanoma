@@ -21,31 +21,47 @@ from scipy.optimize import fmin
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 from scipy import integrate
+from pysb import *
+from pysb.integrate import Solver
+
+# from three_state import model
+import three_state
+
+Model()  
+    
+three_state.declare_monomers()
+three_state.declare_parameters()
+three_state.declare_initial_conditions()
+three_state.declare_observables()
+three_state.declare_functions()
 
 
 
 # Data - need nl2 and time
 
 data = pd.read_csv('/Users/Corey/Documents/QuarantaLab/mixing_all', sep = "\t")
-print data
+#print data
 
 data_parental = pd.read_csv('/Users/Corey/Documents/QuarantaLab/mixing_parental', sep = "\t")
-print data_parental
+#print data_parental
 
 data_parental_treated = data_parental.loc[data_parental['conc'] == 8]
-print data_parental_treated
+#print data_parental_treated
 
-time = data_parental_treated["Time"]
+time = [x for x in data_parental_treated["Time"]]
+
 print time
+  
 
-nl2 = data_parental_treated["nl2"]
+nl2 = [x for x in data_parental_treated["nl2"]]
+
 print nl2
 
 cell_count = data_parental_treated["Cell.Nucleus"]
-print cell_count
+#print cell_count
 
 plt.figure()
-plt.plot(time, nl2)
+plt.plot(time, nl2, "*", ms = 12)
 plt.legend(loc=0, prop={'size': 16})
 plt.xlabel("Time", fontsize=22)
 plt.ylabel("Population Doublings", fontsize=22)
@@ -54,11 +70,11 @@ plt.yticks(fontsize=18)
 plt.title("Mixing", fontsize=22)
 
 plt.show()
-
+quit()
 
 ### Function to define model and parameters ###
 def eq(par,initial_cond,start_t,end_t,incr):
-     #-time-grid
+     #-time-grid: 1/inc + 1?
      t  = np.linspace(start_t, end_t,incr)
      #differential-eq-system----------------------
      def funct(y,t):
@@ -71,7 +87,8 @@ def eq(par,initial_cond,start_t,end_t,incr):
         f1 = A*k_AB - B*k_BA - B*k_BC - B*k_death_B + B*k_div_B + C*k_CB
         f2 = B*k_BC - C*k_CB -C*k_death_C + C*k_div_C
         return [f0, f1, f2]
-     #integrate
+     #integrate using scipy -- change to PySB
+     #
      ds = integrate.odeint(funct,initial_cond,t)
      return (ds[:,0],ds[:,1],ds[:,2],t)
 #=======================================================
