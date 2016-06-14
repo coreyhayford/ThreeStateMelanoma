@@ -50,7 +50,7 @@ print BngGenerator(model).get_content()
 for i in range(len(model.odes)):
     print str(i)+":", model.odes[i]
 
-quit()
+
 
 
 
@@ -65,7 +65,7 @@ print model.species
 t = linspace(0, 100, 100)
 
 y = odesolve(model,t,verbose=True)
-
+#y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
  
 plt.figure()
 

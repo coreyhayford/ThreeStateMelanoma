@@ -26,7 +26,7 @@ def declare_parameters():
     Parameter("k_dip_A", -0.033)
     Parameter("k_dip_B",  0.000)
     Parameter("k_dip_C",  0.016)
-    
+     
 #     Parameter("k_div_A", 0.033)
 #     Parameter("k_div_B",  0)
 #     Parameter("k_div_C",  0.016)
