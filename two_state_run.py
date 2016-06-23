@@ -47,7 +47,7 @@ for n,clr in zip([0,1,1], ['blue','green','darkorange']):
         
         print ld
         model.parameters['Drug0'].value = 10.**ld
-        '''
+        
         # ODE simulations
         x = odesolve(model, tspan, verbose=False)
     #     x = run_ssa(model, tspan, verbose=False)
@@ -87,7 +87,7 @@ for n,clr in zip([0,1,1], ['blue','green','darkorange']):
         
         fig = plt.figure('% Drugged Cells (SSA)')
         plt.plot(y['time'][1:], y['Cell_drug'][1:]/y['Cell_total'][1:]*100., lw=3, color=colors[i])
-        
+        '''
     slopes_ode = np.array(slopes_ode)
     
     plt.figure('Total Cells (ODE) (kon,koff)=(%.2g,%.2g)' % (model.parameters['kon'].value, model.parameters['koff'].value))

@@ -18,9 +18,9 @@ def declare_parameters():
     
     ### Initial Conditions ###
     
-    Parameter("A_0", 1500)
-    Parameter("B_0", 1500)
-    Parameter("C_0", 0)
+    Parameter("A_0", 1000)
+    Parameter("B_0", 1000)
+    Parameter("C_0", 1000)
     
     ### Growth Parameters ###
     Parameter("k_dip_A", -0.033)
