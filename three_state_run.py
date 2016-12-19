@@ -14,15 +14,16 @@ import matplotlib.pyplot as plt
 
 
  
-import three_state
+# import three_state
+import three_state_dip
 
 Model()  
     
-three_state.declare_monomers()
-three_state.declare_parameters()
-three_state.declare_initial_conditions()
-three_state.declare_observables()
-three_state.declare_functions()
+three_state_dip.declare_monomers()
+three_state_dip.declare_parameters()
+three_state_dip.declare_initial_conditions()
+three_state_dip.declare_observables()
+three_state_dip.declare_functions()
 
 
 for m in model.monomers:
@@ -62,27 +63,28 @@ print model.species
 #quit()
 
 
-t = linspace(0, 100, 100)
+t = linspace(0, 200, 200)
 
 y = odesolve(model,t,verbose=True)
-#y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
+# y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
  
-plt.figure()
-
-#for obs in ["Obs_A", "Obs_B", "Obs_C"]:
-#    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-#for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
-#    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-plt.plot(t, y["Obs_AC"], 'k--', lw=3, label="Total")
-plt.legend(loc=0, prop={'size': 16})
-plt.xlabel("Time", fontsize=22)
-plt.ylabel("Cell Population", fontsize=22)
-plt.xticks(fontsize=18)
-plt.yticks(fontsize=18)
-plt.title("Three-State Model", fontsize=22)
-
-# plt.show()
-plt.savefig("three_state_model_mix.pdf", format= "pdf")
+# plt.figure()
+# 
+# #for obs in ["Obs_A", "Obs_B", "Obs_C"]:
+# #    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+# #for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
+# #    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
+# plt.plot(t, y["Obs_AC"], 'k--', lw=3, label="Total")
+# plt.legend(loc=0, prop={'size': 16})
+# plt.xlabel("Time", fontsize=22)
+# plt.ylabel("Cell Population", fontsize=22)
+# plt.xticks(fontsize=18)
+# plt.yticks(fontsize=18)
+# 
+# plt.title("Three-State Model", fontsize=22)
+# 
+# # plt.show()
+# plt.savefig("three_state_model_mix.pdf", format= "pdf")
 
 
 plt.figure()
@@ -95,15 +97,36 @@ plt.figure()
 #    plt.plot(t, y[obs], label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
 #for obs in ["Obs_AB", "Obs_BC", "Obs_AC"]:
 #    plt.plot(t, y[obs], '--', label=re.match(r"Obs_(\w+)", obs).group(1), linewidth=3)
-plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'b--', lw=3, label="1:1:1")
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'r:', lw=3, label="1:1:1")
+
+
+model.parameters["A_0"].value = 1500
+model.parameters["B_0"].value = 750
+model.parameters["C_0"].value = 750
+
+y = odesolve(model, t, verbose=True)
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'm-.', lw=3, label="2:1:1")
+
+model.parameters["A_0"].value = 1800
+model.parameters["B_0"].value = 600
+model.parameters["C_0"].value = 600
+
+y = odesolve(model, t, verbose=True)
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'k-', lw=3, label="3:1:1")
+
+
 #plt.yscale('log', basey=2)
 
 plt.xlabel("Time", fontsize=22)
-plt.ylabel("Cell Population log2", fontsize=22)
+plt.ylabel("Population Doublings (nl2)", fontsize=22)
 plt.xticks(fontsize=18)
 plt.yticks(fontsize=18)
-plt.title("Three-State Model", fontsize=22)
 
+
+plt.title("Three-State Model", fontsize=22)
+plt.legend(loc=0, prop={'size': 16})
+plt.show()
+quit()
 #########
 
 model.parameters["A_0"].value = 600
@@ -112,7 +135,6 @@ model.parameters["C_0"].value = 600
 
 y = odesolve(model, t, verbose=True)
 plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'r--', lw=3, label="1:3:1")
-plt.legend(loc=0, prop={'size': 16})
 
 #plt.savefig("three_state_model_mix_log2.pdf", format= "pdf")
 

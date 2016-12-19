@@ -51,16 +51,16 @@ three_state.declare_functions()
 ####################################################################################################
 
 # Import experimental data - need normalized log2 cell count and time
-mixing_all = pd.read_csv('/Users/Corey/Documents/QuarantaLab/mixing_all_rep', sep = "\t")
+mixing_all = pd.read_csv('/Users/Corey/Documents/QuarantaLab/mixing_all', sep = "\t")
 
 # Open an empty list which will be appended with necessary experimental data
 mixing = []
 
 mixing.append(mixing_all.loc[mixing_all['CellLine'] == "SKMEL5 Parental"])
-#mixing.append(mixing_all.loc[mixing_all['CellLine'] == "SKMEL5 Subclone01"])
+mixing.append(mixing_all.loc[mixing_all['CellLine'] == "SKMEL5 Subclone01"])
 mixing.append(mixing_all.loc[mixing_all['CellLine'] == "SKMEL5 Subclone07"])
 mixing.append(mixing_all.loc[mixing_all['CellLine'] == "SKMEL5 Subclone10"])
-#mixing.append(mixing_all.loc[mixing_all['CellLine'] == "Subclone01+Subclone07"])
+mixing.append(mixing_all.loc[mixing_all['CellLine'] == "Subclone01+Subclone07"])
 mixing.append(mixing_all.loc[mixing_all['CellLine'] == "Subclone01+Subclone10"])
 mixing.append(mixing_all.loc[mixing_all['CellLine'] == "Subclone07+Subclone10"])
 mixing.append(mixing_all.loc[mixing_all['CellLine'] == "All"])
@@ -68,7 +68,7 @@ mixing.append(mixing_all.loc[mixing_all['CellLine'] == "All"])
 
 # Open an empty list of averaged (from 3 replicates) normalized log2 cell counts
 nl2_average = []
-time_points = 17 # Replace with however many time points in experimental data
+time_points = 10 # Replace with however many time points in experimental data
 
 # Loop over the mixing list and create sublists corresponding to the experimental replicates, and
 # take the average, which will be appended to the empty list above. Loop for all conditions, and 
@@ -76,8 +76,11 @@ time_points = 17 # Replace with however many time points in experimental data
 for i,m in enumerate(mixing):
     sublist = [m[x:x+time_points] for x in range(0, len(m), time_points)]
     rep1 = sublist[0] # first replicate data points
+    print rep1
     rep2 = sublist[1]
+    print rep2
     rep3 = sublist[2]
+    print rep3
     # Create a time list for experimental and computational results -- same for all
     time = [x for x in rep1["Time"]] 
     # Make lists numpy arrays so can easily do math on them
@@ -94,7 +97,8 @@ for i,m in enumerate(mixing):
     plt.plot(time, nl2_rep1, '*', ms = 12, mfc = "0.75")
     plt.plot(time, nl2_rep2, '*', ms = 12, mfc = "0.75")
     plt.plot(time, nl2_rep3, '*', ms = 12, mfc = "0.75")  
-    
+plt.show()
+quit()    
     
 nl2_average = np.array(nl2_average) # Make nl2_average list an array - easier to work with
 
