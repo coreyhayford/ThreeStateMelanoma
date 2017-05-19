@@ -23,6 +23,8 @@ def declare_monomers():
     Monomer("H")
     Monomer("I")
     Monomer("J")
+    
+    #[Monomer("M_%d" %i for i in range(100))]
 #     for i in xrange(1,10):
 #         
 #         print(i)

@@ -35,16 +35,16 @@ def declare_parameters():
 #     
 #     # Initial Conditions
 
-    Parameter("A_0", 100)
-    Parameter("B_0", 100)
-    Parameter("C_0", 100)
-    Parameter("D_0", 100)
-    Parameter("E_0", 100)
-    Parameter("F_0", 100)
-    Parameter("G_0", 100)
-    Parameter("H_0", 100)
-    Parameter("I_0", 100)
-    Parameter("J_0", 100)
+    Parameter("A_0", 1000)
+    Parameter("B_0", 1000)
+    Parameter("C_0", 1000)
+    Parameter("D_0", 1000)
+    Parameter("E_0", 1000)
+    Parameter("F_0", 1000)
+    Parameter("G_0", 1000)
+    Parameter("H_0", 1000)
+    Parameter("I_0", 1000)
+    Parameter("J_0", 1000)
    
 #     for j in xrange(1,10):
 #         Parameter(j + "_0", 10)
@@ -62,16 +62,16 @@ def declare_parameters():
     Parameter("k_div_I", 0.02 * np.random.randn() + 0.06)
     Parameter("k_div_J", 0.02 * np.random.randn() + 0.06)
     
-    Parameter("k_death_A", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_B", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_C", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_D", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_E", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_F", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_G", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_H", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_I", 0.02 * np.random.randn() + 0.06)
-    Parameter("k_death_J", 0.02 * np.random.randn() + 0.06)
+    Parameter("k_death_A", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_B", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_C", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_D", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_E", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_F", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_G", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_H", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_I", 0.02 * np.random.randn() + 0.09)
+    Parameter("k_death_J", 0.02 * np.random.randn() + 0.09)
     
 #     for k in xrange(1,10):
 #         Parameter("k_dip_" + k, 0.02 * np.random.randn(1,10) + 0)

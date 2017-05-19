@@ -51,7 +51,7 @@ print BngGenerator(model).get_content()
 for i in range(len(model.odes)):
     print str(i)+":", model.odes[i]
 
-
+quit()
 
 
 

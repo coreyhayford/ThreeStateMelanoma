@@ -200,7 +200,7 @@ for i in range(1,10):
 #     quit()
     
     t = linspace(0, 200, 201)
-    
+
     #y = odesolve(model, t, verbose=True)
     y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
     
@@ -260,7 +260,10 @@ for i in range(1,10):
     y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
     plot(t, t_start=t[-1], label=False)
 
-plt.show()    
+#     print(A_0.value, B_0.value, C_0.value, D_0.value, E_0.value, F_0.value, G_0.value, H_0.value, I_0.value, J_0.value)
+
+plt.tight_layout()
+plt.show()
 ## DONE: established initial conditions as a function of gillespie sims
 ## DONE: Pick DIP rates from multinomial distribution
 ## DONE: Plot before and after drug simulated results
@@ -268,6 +271,10 @@ plt.show()
 ## DONE: Put in line for drug introduction
 ## DONE: Stitch together subplots and make into figure - made in a loop
 
+
+## GOAL: Incorporate James' GPU simulator with only 1 cell and run 1000s of sims
+## GOAL: Plot the clonal distributions like Hata
+## GOAL: Make it for 1 million barcoded cells rather than 10
 ## GOAL: Play with different DIP rates/distributions to model diversification phenotype
 ## GOAL: Only pick time points similar to experiment??
 ## GOAL: Include state transitions in the model

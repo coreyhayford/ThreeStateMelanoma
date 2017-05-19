@@ -17,9 +17,9 @@ import matplotlib.pyplot as plt
 # Import Model
 import barcoding_SCFD_states
 
-plt.figure("Barcoding Deterministic Simulations")
+plt.figure("Barcoding Stochastic Simulations")
 ####
-for i in range(1,5):
+for i in range(1,2):
     
     Model()  
         
@@ -32,30 +32,30 @@ for i in range(1,5):
     
     for m in model.monomers:
         print m
-        
+         
     for p in model.parameters:
         print p
-        
+         
     for ic in model.initial_conditions:
         print ic
-    
+     
     for obs in model.observables:
         print obs
-    
+     
     for rules in model.rules:
         print rules
         
     for exp in model.expressions:
         print exp
-    
+        
     
     t = linspace(0, 200, 200)
     
-    y = odesolve(model, t, verbose=True)
-    #y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
+    #y = odesolve(model, t, verbose=True)
+    y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
     
     
-    plt.subplot(2,2,i)
+    plt.subplot(3,3,i)
     plt.plot(t, np.log2(y["Obs_A"]/y["Obs_A"][0]), 'r-', lw=2)
     plt.plot(t, np.log2(y["Obs_B"]/y["Obs_B"][0]), 'b-', lw=2)
     plt.plot(t, np.log2(y["Obs_C"]/y["Obs_C"][0]), 'g-', lw=2)

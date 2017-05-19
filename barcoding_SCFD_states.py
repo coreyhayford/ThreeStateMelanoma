@@ -16,9 +16,9 @@ import scipy.stats
 Model()
 
 # Randomly picking the initial conditions - "Biased Die" Method
-
+  
 def roll(Dist, num):
-    
+     
     randRolls = []
     results = []
     for i in range(num):
@@ -30,7 +30,7 @@ def roll(Dist, num):
         for val in Dist: # bin, val in enumerate(Dist)
             sum += val
             #print("Mass: " + str(val))
-            
+             
             if randRoll < sum:
                 #print(result)
                 results.append(result) #[bin]
@@ -38,9 +38,9 @@ def roll(Dist, num):
             result += 1 # delete 
             #print("Sum " + str(sum))
             #print(result)
-
-    print(randRolls)
-    print(results)
+ 
+    #print(randRolls)
+    #print(results)
     counts = []
     for j in range(len(Dist)):
         count = 0
@@ -49,13 +49,14 @@ def roll(Dist, num):
                 count += 1
         counts.append(count)
     counts = 1.* np.array(counts)/num #number. = float
-    print(counts)
+    #print(counts)
     return counts
-
+  
 #     ps = pd.Series(results)
 #     global counts
 #     counts = ps.value_counts(sort = False)
 #     print(counts)
+plt.figure(1)
 mean = 10
 var = mean
 x_vals = np.linspace(0,3*mean+1, 3*mean)
@@ -64,32 +65,38 @@ x_nvals = np.linspace(0, 3*mean+1, 3*mean*100)
 pdf_dist = scipy.stats.norm.pdf(x_nvals, loc = mean, scale = np.sqrt(var)) #, endpoint, retstep, dtype))
 print(np.sum(pdf_dist)*(x_nvals[1]-x_nvals[0]))
 
-pmf_dist = scipy.stats.poisson.pmf(range(3*mean+1), mu = mean)
+pmf_dist = scipy.stats.poisson.pmf(range(2*mean), mu = mean)
 print(pmf_dist)
 print(len(pmf_dist))
 print(np.sum(pmf_dist))
-print(np.array(range(3*mean+1))-0.5)
+print(np.array(range(mean+1)))
+quit()
 
 
 plt.plot(x_nvals, pdf_dist, "r-", lw = 2)
-plt.bar(left = np.array(range(3*mean+1))-0.5, height = pmf_dist, width = 1)
+plt.bar(left = np.array(range(2*mean))-0.5, height = pmf_dist, width = 1)
 #plt.xlim(xmin = 50, xmax = 150)
+
+# plt.figure(2)
+# sampleDist = (0.02, 0.04, 0.08, 0.16, 0.20, 0.20, 0.16, 0.08, 0.04, 0.02)
+# plt.plot(range(len(sampleDist)), sampleDist, "r-*", lw = 2)
+
+#counts = roll(pmf_dist, 10000)
+
+#plt.bar(left = np.array(range(len(counts)))-0.5, height = counts, width = 1) #, bottom, hold, data) 
+
+a = np.random.multinomial(10000, pmf_dist)
+a1 = a/10000.
+print(a)
+print(a1)
+#print(counts)
+plt.plot(range(len(pmf_dist)), a1, "g-o")
 plt.show()
+#plt.show()
+
+#print(results)
+#print(counts)
 quit()
-sampleDist = (0.02, 0.04, 0.08, 0.16, 0.20, 0.20, 0.16, 0.08, 0.04, 0.02)
-plt.plot(range(len(sampleDist)), sampleDist, "r-*", lw = 2)
-
-counts = roll(sampleDist, 10000)
-
-plt.bar(left = np.array(range(len(counts)))-0.5, height = counts, width = 1) #, bottom, hold, data) 
-
-a = np.random.multinomial(10000, sampleDist)/10000.
-plt.plot(range(len(sampleDist)), a, "go")
-plt.show()
-quit()
-print(results)
-print(counts)
-
 def declare_monomers():
     
     Monomer('Cell', ['barcode', 'dip'], {'barcode':['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 

@@ -118,9 +118,12 @@ def plot(t, t_start=0, label=False):
     
 #     plt.plot(t+t_start, y["Obs_All"], 'k-', lw=4, 
 #              label = ('All') if label else None)
+    
+    
     plt.xlabel("Time")
     plt.ylabel("Population Doublings")
     plt.legend(loc = 0) #, fontsize = 6)
+#     plt.ylim([0,1000])
 
 
 # def plot(t, t_start=0, label=False):
@@ -169,7 +172,7 @@ for i in range(1,2):
     #y = odesolve(model, t, verbose=True)
     y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
     
-    
+#     plt.subplot(3,3,i)
     plot(t, label = False)
     
     plt.axvline(x=t[-1], color='red', ls='--', lw=4)
@@ -191,7 +194,7 @@ for i in range(1,2):
 #     plt.legend(loc = 0)
 #     plt.title("Replicate " + str(i))
 
-#plt.tight_layout()
+# plt.tight_layout()
 # plt.show()
 # quit()
 # print(y["Obs_A"][-1])
@@ -234,7 +237,7 @@ def declare_newparameters():
     alias_model_components()
 
 
-dips = np.random.normal(-0.033, 0.01, 100)
+dips = np.random.normal(-0.033, 0.005, 100)
 # print(dips)
 count, bins, ignored = plt.hist(dips, 10, normed=True)
 # plt.show()
@@ -278,27 +281,27 @@ picks = np.random.multinomial(10, count_normalized)
 
 def declare_drug_parameters():
     
-    Parameter("k_divide_A", 0.35)
-    Parameter("k_divide_B", 0.35)
-    Parameter("k_divide_C", 0.35)
-    Parameter("k_divide_D", 0.35)
-    Parameter("k_divide_E", 0.35)
-    Parameter("k_divide_F", 0.35)
-    Parameter("k_divide_G", 0.35)
-    Parameter("k_divide_H", 0.35)
-    Parameter("k_divide_I", 0.35)
-    Parameter("k_divide_J", 0.35)
+    Parameter("k_divide_A", 0.25)
+    Parameter("k_divide_B", 0.25)
+    Parameter("k_divide_C", 0.25)
+    Parameter("k_divide_D", 0.25)
+    Parameter("k_divide_E", 0.25)
+    Parameter("k_divide_F", 0.25)
+    Parameter("k_divide_G", 0.25)
+    Parameter("k_divide_H", 0.25)
+    Parameter("k_divide_I", 0.25)
+    Parameter("k_divide_J", 0.25)
     
-    Parameter("k_death_A", -bins_avg_array[0]+0.35)
-    Parameter("k_death_B", -bins_avg_array[1]+0.35)
-    Parameter("k_death_C", -bins_avg_array[2]+0.35)
-    Parameter("k_death_D", -bins_avg_array[3]+0.35)
-    Parameter("k_death_E", -bins_avg_array[4]+0.35)
-    Parameter("k_death_F", -bins_avg_array[5]+0.35)
-    Parameter("k_death_G", -bins_avg_array[6]+0.35)
-    Parameter("k_death_H", -bins_avg_array[7]+0.35)
-    Parameter("k_death_I", -bins_avg_array[8]+0.35)
-    Parameter("k_death_J", -bins_avg_array[9]+0.35)
+    Parameter("k_death_A", -bins_avg_array[0]+0.25)
+    Parameter("k_death_B", -bins_avg_array[1]+0.25)
+    Parameter("k_death_C", -bins_avg_array[2]+0.25)
+    Parameter("k_death_D", -bins_avg_array[3]+0.25)
+    Parameter("k_death_E", -bins_avg_array[4]+0.25)
+    Parameter("k_death_F", -bins_avg_array[5]+0.25)
+    Parameter("k_death_G", -bins_avg_array[6]+0.25)
+    Parameter("k_death_H", -bins_avg_array[7]+0.25)
+    Parameter("k_death_I", -bins_avg_array[8]+0.25)
+    Parameter("k_death_J", -bins_avg_array[9]+0.25)
 
 declare_drug_parameters()
 declare_newparameters()
@@ -367,8 +370,10 @@ declare_drug_rules()
 ## DONE: Pick DIP rates from multinomial distribution
 ## DONE: Plot before and after drug simulated results
 ## DONE: Apply new plot function to stitch together results
+## DONE: Put in line for drug introduction
 
-## GOAL: Put in line for drug introduction
+## GOAL: Stitch together subplots and make into figure
+######## Store the final points associated with each replicate - how? indecies?
 ## GOAL: Play with different DIP rates/distributions to model diversification phenotype
 ## GOAL: Only pick time points similar to experiment??
 ## GOAL: Include state transitions in the model
@@ -390,6 +395,7 @@ for i in range(1,2):
     
 #     y = odesolve(model, t, verbose=True)
     y = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)
+#     plt.subplot(3,3,i)
     plot(t, t_start=t[-1], label=True)
 #     plot(t, t_start=t[-1], label=True)
     #plt.subplot(2,2,i)
@@ -409,6 +415,7 @@ for i in range(1,2):
 #     plt.legend(loc = 0)
 #     plt.title("Replicate " + str(i))
 # print(model.parameters)
+# plt.tight_layout()
 plt.show()
 # x = np.linspace(-0.033, 0.033, 10)
 # # x = np.linspace(norm.ppf(0.01), norm.ppf(0.1), 10)
