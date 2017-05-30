@@ -32,24 +32,46 @@ cFPdata4_notrans = np.load("0.7_0.2_0.1_10kData_cFP_noTrans.npy")
 cFPdata5_notrans = np.load("0.5_0.3_0.2_10kData_cFP_noTrans.npy")
 cFPdata6_notrans = np.load("0.25_0.5_0.25_10kData_cFP_noTrans.npy")
 
+expData_p11 = np.loadtxt("experimental_psg11.txt", delimiter='\t')
+expData_p15 = np.loadtxt("experimental_psg15.txt", delimiter='\t')
+expData_p19 = np.loadtxt("experimental_psg19.txt", delimiter='\t')
+expData_par = np.loadtxt("experimental_parental.txt", delimiter='\t')
+
 
 frames_LCStrans = [LCSdata1_trans,LCSdata2_trans,LCSdata3_trans,LCSdata4_trans,LCSdata5_trans,LCSdata6_trans]
+frames_LCStrans_mod = [LCSdata1_trans,LCSdata2_trans,LCSdata3_trans,LCSdata4_trans]
 frames_cFPtrans = [cFPdata1_trans,cFPdata2_trans,cFPdata3_trans,cFPdata4_trans,cFPdata5_trans,cFPdata6_trans]
 frames_LCSnotrans = [LCSdata1_notrans,LCSdata2_notrans,LCSdata3_notrans,LCSdata4_notrans,LCSdata5_notrans,LCSdata6_notrans]
 frames_cFPnotrans = [cFPdata1_notrans,cFPdata2_notrans,cFPdata3_notrans,cFPdata4_notrans,cFPdata5_notrans,cFPdata6_notrans]
+expData = [expData_p11, expData_p15, expData_p19, expData_par]
 
-sns.set_style("white")
+sns.set(font_scale = 2)
+sns.set_style("whitegrid")
+col_list = ["red", "green", "blue", "purple"]
+col_list_palette = sns.xkcd_palette(col_list)
+sns.set_palette(col_list_palette)
 sns.despine(offset=10, trim=True)
-labels = ['1_0_0', '0.95_0.05_0', '0.85_0.10_0.05',
-          '0.70_0.20_0.10','0.50_0.30_0.20','0.25_0.50_0.25']
+# labels = ['1_0_0', '0.95_0.05_0', '0.85_0.10_0.05',
+#           '0.70_0.20_0.10','0.50_0.30_0.20','0.25_0.50_0.25']
+labels = ['1_0_0', '0.95_0.05_0', '0.85_0.10_0.05', '0.25_0.50_0.25']
+expDataLabels = ['Passage 11', 'Passage 15', 'Passage 19', 'Parental']
 
-ax = sns.violinplot(data = frames_cFPnotrans, cut = 0, inner = 'box')
+ax = sns.violinplot(data = frames_LCStrans_mod, cut = 0, inner = 'box')
+# ax = sns.violinplot(data = expData, cut = 0, inner = 'box')
+
 # ax = sns.boxplot(data = frames_cFPnotrans)
+# fig, ax = plt.subplots()
+# for a in frames_LCStrans:
+#     sns.distplot(a, ax=ax, kde=False, bins=50)
+# ax.set_xlim([-0.02, 0.02])
 
-ax.set_xticklabels(labels, fontsize = 10)
-ax.set_title("DIP Distributions by Initial Composition", fontsize = 20)
-ax.set_ylabel("DIP Rate", fontsize = 16)
-ax.set_xlabel("Initial Clonal Composition", fontsize = 16)
+ax.set_xticklabels(labels)
+# ax.set_title("DIP Distributions by Initial Composition")
+ax.set_ylabel("DIP Rate", weight = "bold")
+ax.set_xlabel("Subpopulations", weight = "bold")
+plt.ylim(-0.022,0.022)
+# ax.legend(labels = labels, fontsize = 16)
+
 plt.show()
 quit()
 
