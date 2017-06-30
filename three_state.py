@@ -18,9 +18,9 @@ def declare_parameters():
     
     ### Initial Conditions ###
     
-    Parameter("A_0", 1000)
-    Parameter("B_0", 1000)
-    Parameter("C_0", 1000)
+    Parameter("A_0", 3000)
+    Parameter("B_0", 0)
+    Parameter("C_0", 0)
     
     ## Growth Parameters ###
 #     Parameter("k_dip_A", -0.033)
@@ -44,17 +44,30 @@ def declare_parameters():
 ### OLD PARAMETERS ###    
 
     Parameter("k_div_A", 0.033)
-    Parameter("k_div_B",  0)
-    Parameter("k_div_C",  0.016)
-     
-    Parameter("k_death_A", 0.066)
-    Parameter("k_death_B",  0)
-    Parameter("k_death_C",  0)
-     
-    Parameter("k_AB",     0.025)
-    Parameter("k_BA",     0.00004)
-    Parameter("k_CB",     0.025)
-    Parameter("k_BC",     0.00004)
+    Parameter("k_div_B", 0.033)
+    Parameter("k_div_C", 0.033)
+
+    Parameter("k_death_A", 0.053)
+    Parameter("k_death_B", 0.033)
+    Parameter("k_death_C", 0.013)
+
+    Parameter("k_AB", 0.025)
+    Parameter("k_BA", 0.00025)
+    Parameter("k_CB", 0.025)
+    Parameter("k_BC", 0.00025)
+
+    # Parameter("k_div_A", 0.033)
+    # Parameter("k_div_B",  0)
+    # Parameter("k_div_C",  0.016)
+    #
+    # Parameter("k_death_A", 0.066)
+    # Parameter("k_death_B",  0)
+    # Parameter("k_death_C",  0)
+    #
+    # Parameter("k_AB",     0.025)
+    # Parameter("k_BA",     0.00004)
+    # Parameter("k_CB",     0.025)
+    # Parameter("k_BC",     0.00004)
      
     alias_model_components()
     

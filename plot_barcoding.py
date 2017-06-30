@@ -8,34 +8,34 @@ barcodes = ["Barcode_%s" %i for i in range(1,1001)]
 
 sns.set(font_scale = 2)
 sns.set_style("whitegrid")
-barcoding_data = np.load("barcoding_data_1000.npy")
+barcoding_data = np.load("barcoding_data_1000bar100exp100states.npy")
 print(barcoding_data)
 print(len(barcoding_data))
 barcoding_df = pd.DataFrame(barcoding_data)
-# barcoding_df = pd.DataFrame.transpose(barcoding_df)
+barcoding_df = pd.DataFrame.transpose(barcoding_df)
 
 # barcoding_df.index.name = "Experiment"
 print(barcoding_df)
-df_sum = barcoding_df.sum()
+df_sum = barcoding_df.sum(axis = 1)
 df_sort = df_sum.sort_values(ascending=False)
 print(df_sort)
-df_sort.plot(kind='bar', stacked = True, title = "1000 Barcodes over 10 Experiments")
+df_sort.plot(kind='bar', title = "1000 Barcodes over 10 Experiments - 16 states")
+sns.rugplot(df_sort, color="r", axis = 'y', height = 0.01)
 plt.xlabel("Barcodes")
 plt.ylabel("Count")
-plt.xticks([])
-plt.show()
-quit()
-    #groupby(level = 0) #.sum().sort_values(ascending=False)
-print(df_sort)
-quit()
-
+# plt.xticks([])
+# plt.show()
 # quit()
-barcoding_df.plot(kind='bar', stacked = True, title = "1000 Barcodes over 10 Experiments")
+
+barcoding_df.plot(kind='bar', stacked = True, title = "1000 Barcodes over 10 Experiments - 16 states", legend = False)
 plt.xlabel("Barcodes")
 plt.ylabel("Count")
 
 plt.show()
 quit()
+
+#groupby(level = 0) #.sum().sort_values(ascending=False)
+
 # colors = ["red", "blue", "green", "black", "gold", "lightsalmon", "saddlebrown", "coral", "cyan", "aqua"]
 # for i in range(len(barcoding_data)):
 #     sns.barplot(range(len(barcoding_data)), [pt[i] for pt in barcoding_data])
@@ -47,4 +47,3 @@ quit()
 # test = pd.melt(barcoding_df, value_vars=barcodes)
 # print(test)
 # sns.barplot(data = test, x = "variable")
-plt.show()
