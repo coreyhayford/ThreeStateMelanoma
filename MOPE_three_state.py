@@ -51,7 +51,7 @@ three_state.declare_functions()
 ####################################################################################################
 
 # Import experimental data - need normalized log2 cell count and time
-mixing_all = pd.read_csv('/Users/Corey/Documents/QuarantaLab/mixing_all', sep = "\t")
+mixing_all = pd.read_csv('/Users/Corey/Documents/QuarantaLab/Mixing/mixing_all', sep = "\t")
 
 # Open an empty list which will be appended with necessary experimental data
 mixing = []
@@ -98,7 +98,6 @@ for i,m in enumerate(mixing):
     plt.plot(time, nl2_rep2, '*', ms = 12, mfc = "0.75")
     plt.plot(time, nl2_rep3, '*', ms = 12, mfc = "0.75")  
 plt.show()
-quit()    
     
 nl2_average = np.array(nl2_average) # Make nl2_average list an array - easier to work with
 

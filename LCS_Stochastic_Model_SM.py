@@ -39,16 +39,16 @@ def declare_parameters():  # Parameter("name_of_par", value)
     Parameter('k_death_A', .005)
     Parameter('k_death_B', .005)
     Parameter('k_death_C', .005)
-
+    #
     # Parameter("k_AB",     0.)
     # Parameter("k_BA",     0.)
     # Parameter("k_CB",     0.)
     # Parameter("k_BC",     0.)
 
-    # Parameter("k_AB",     0.025)
-    # Parameter("k_BA",     0.00004)
-    # Parameter("k_CB",     0.025)
-    # Parameter("k_BC",     0.00004)
+    Parameter("k_AB",     0.025)
+    Parameter("k_BA",     0.00004)
+    Parameter("k_CB",     0.025)
+    Parameter("k_BC",     0.00004)
 
     alias_model_components()  # "Make all model components visible as symbols in the caller's global namespace"
 
@@ -78,7 +78,7 @@ def declare_rules():  # Rule("rule_name", chemical reaction, call name of DIP ra
     Rule("Death_C", C() >> None, k_death_C)
 
 
-    # Rule("A_to_B", A() >> B(), k_AB)
-    # Rule("B_to_A", B() >> A(), k_BA)
-    # Rule("B_to_C", B() >> C(), k_BC)
-    # Rule("C_to_B", C() >> B(), k_CB)
+    Rule("A_to_B", A() >> B(), k_AB)
+    Rule("B_to_A", B() >> A(), k_BA)
+    Rule("B_to_C", B() >> C(), k_BC)
+    Rule("C_to_B", C() >> B(), k_CB)
