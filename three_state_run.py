@@ -131,7 +131,7 @@ print(x1.all[-1]["Obs_All"])
 
 plot_mean_min_max('Obs_All', color = 'red')
 y = odesolve(model = model,tspan = t, verbose = True)
-plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'r-', lw=4)
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'r-', lw=4, label = "100% SC01")
 
 # [plt.plot(t, np.log2(x1.all[i]['Obs_All']/x1.all[i]['Obs_All'][0]), lw = 1, color = 'r') for i in range(sims)]#label = obs.name, color = colors[i])
 # plt.plot(tout.T, (y1['Obs_All']).T, color = 'r')
@@ -153,7 +153,7 @@ y1 = np.array(x1.observables)
 
 plot_mean_min_max('Obs_All', color = "green")
 y = odesolve(model, t, verbose=True)
-plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'g-', lw=3, dashes = (8,2))
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'g-', lw=3, dashes = (8,2), label = "85% SC01 : 10% SC07 : 5% SC10")
 # plt.plot(t, y["Obs_All"], 'g--', lw=3)#, label="2:1:1")
 
 model.parameters["A_0"].value = 2100
@@ -168,7 +168,7 @@ y1 = np.array(x1.observables)
 
 plot_mean_min_max('Obs_All', color = "blue")
 y = odesolve(model, t, verbose=True)
-plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'b-', lw=3, dashes = (10,4))
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'b-', lw=3, dashes = (10,4), label = "70% SC01 : 20% SC07 : 10% SC10")
 # plt.plot(t, y["Obs_All"], 'b--', lw=3, dashes=(10, 1))#, label="3:1:1")
 
 model.parameters["A_0"].value = 750
@@ -183,7 +183,7 @@ y1 = np.array(x1.observables)
 
 plot_mean_min_max('Obs_All', color = "magenta")
 y = odesolve(model, t, verbose=True)
-plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'm-', lw=3, dashes = (12,6))
+plt.plot(t, np.log2(y["Obs_All"]/y["Obs_All"][0]), 'm-', lw=3, dashes = (12,6), label = "25% SC01 : 50% SC07 : 25% SC10")
 # plt.plot(t, y["Obs_All"], 'm--', lw=3, dashes=(10, 1.5))#, label="3:1:1")
 
 
@@ -199,10 +199,10 @@ plt.xlim(-5,205)
 
 plt.title("Three-State Model", fontsize=22)
 
-plt.legend(loc=9, bbox_to_anchor=(0.5, -0.1), ncol=4)
+# plt.legend(loc=9, bbox_to_anchor=(0.5, -0.1), ncol=4)
 
 
-# plt.legend(loc=0, prop={'size': 16})
+plt.legend(loc=0, prop={'size': 16})
 plt.show()
 quit()
 # y2 = run_ssa(model,t_end = t[-1], n_steps = len(t)-1, verbose=True)

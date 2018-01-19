@@ -49,7 +49,7 @@ import LCS_Stochastic_Model_SM as pre
 # np.random.seed(seed)
 
 
-def noTransition_model(prob):
+def Transition_model(prob):
     distr_a = []
     distr_b = []
     distr_c = []
@@ -215,14 +215,15 @@ def noTransition_model(prob):
     # plt.xlim(-0.05, 0.05)
     # plt.ylim(0, 125)
     plt.title("LCS SC01 Model with Probabilities %s, %s, %s" % (str(prob[0]), str(prob[1]), str(prob[2])), fontsize = 18)
-    np.save('%s_%s_%s_10kData_LCS_noTrans.npy' % (str(prob[0]), str(prob[1]), str(prob[2])), data)
-    fig.savefig('LCSmodelSC01diversify10k_noTrans_%s_%s_%s.pdf' % (str(prob[0]), str(prob[1]), str(prob[2])))
+    np.save('%s_%s_%s_10kData_LCS_forselfdistance.npy' % (str(prob[0]), str(prob[1]), str(prob[2])), data)
+    fig.savefig('LCSmodelSC01diversify10k_selfdist_%s_%s_%s.pdf' % (str(prob[0]), str(prob[1]), str(prob[2])))
     # plt.show()
     plt.close()
 
-noTransition_model(prob = [1.0, .0, .0])
-noTransition_model(prob = [0.95, .05, .0])
-noTransition_model(prob = [0.85, .10, .05])
-noTransition_model(prob = [0.70, .20, .10])
-noTransition_model(prob = [0.50, .30, .20])
-noTransition_model(prob = [0.25, .50, .25])
+Transition_model(prob = [1.0, .0, .0])
+# noTransition_model(prob = [1.0, .0, .0])
+# noTransition_model(prob = [0.95, .05, .0])
+# noTransition_model(prob = [0.85, .10, .05])
+# noTransition_model(prob = [0.70, .20, .10])
+# noTransition_model(prob = [0.50, .30, .20])
+# noTransition_model(prob = [0.25, .50, .25])

@@ -6,6 +6,10 @@ from pysb.bng import run_ssa
 from pysb.simulator.bng import BngSimulator
 from pysb.bng import generate_equations
 import pandas as pd
+import seaborn as sns
+
+sns.set(font_scale = 1.25)
+sns.set_style("whitegrid")
 
 # Setting Key Model Parameters
 # n_exp = 5
@@ -98,11 +102,11 @@ def run_barcoding_model(n_exp, n_barcodes, n_cell_types):
                 cell_pop = np.random.multinomial(int(round(cell)), normal_hist) # *100 for true normal
                 # print(cell_pop)
 
-                ## Normal Histogram Multinomial Selection of DIP Rates
-                # plt.figure("DIP Rate Distribution Barcode #%d" % ind)
-                # plt.bar(dips-0.5*(dips[1]-dips[0]), 1.*cell_pop/int(round(cell)), dips[1]-dips[0], label = "n_cells = %d" %int(cell)) # *100 for true normal
-                # plt.plot(dips, normal_hist, lw = 2, color = "r")
-                # plt.legend(loc = 0)
+                # Normal Histogram Multinomial Selection of DIP Rates
+                plt.figure("DIP Rate Distribution Barcode #%d" % ind)
+                plt.bar(dips-0.5*(dips[1]-dips[0]), 1.*cell_pop/int(round(cell)), dips[1]-dips[0], label = "n_cells = %d" %int(cell)) # *100 for true normal
+                plt.plot(dips, normal_hist, lw = 2, color = "r")
+                plt.legend(loc = 0)
                 t2 = np.linspace(0,168,169) # 7 days in drug
 
                 x2 = sim.run(tspan = t2, param_values={"k_death_0": model.parameters['k_death_0'].value},
@@ -110,10 +114,28 @@ def run_barcoding_model(n_exp, n_barcodes, n_cell_types):
                 # ,"cellInit_0": 0}, - FIXED THIS PROBLEM
 
                 post_drug_counts.append(x2.all["Obs_All"][-1])
-
+                print(x1.all[ind]["Obs_Cell0"])
+                plt.figure()
+                plt.plot(x1.tout[ind], np.log2(x1.all[ind]["Obs_Cell0"]), '0.5', lw = 2)
+                a = np.array(x1.observables)["Obs_Cell0"]
+                print(np.array([tr[:] for tr in a]))
+                # quit()
+                # plt.plot(x1.tout, np.array([tr[:] for tr in a]), '0.5')
+                plt.plot(t1[-1] + x2.tout[0], np.log2(x2.observables["Obs_All"]), '0.5', lw = 2)
+                plt.axvline(x = 336, linewidth = 4, color = 'red')
+                plt.axvline(x = 504, linewidth = 4, color = 'blue')
+                plt.xlabel("Time (hours)")
+                plt.ylabel("log2(cell count)")
+                plt.xlim([0,550])
+                plt.title("Barcoding Model - 100 barcodes, 10 experiments, 15 states")
                 # plt.figure("Experiment #%d Barcode #%d" % (exp,ind))
                 # plt.plot(t1, x1.all[int(cell)]["Obs_Cell0"],'0.5', lw=4, alpha=0.25)
                 # for i,obs in enumerate(model.observables):
+                    # print(x1.all[int(cell)])
+                    # quit()
+                    # plt.plot(t1, x1.all[obs.name], lw = 2, label = obs.name, color = colors[i])
+                    # plt.plot(t1, x1.all[obs.name], '0.5', lw=4, alpha=0.25)
+                    # plt.plot(t1[-1]+t2, x2.all[obs.name], '0.5', lw = 4, alpha = 0.25)
                     # plt.plot(t1, x1.all[obs.name], lw = 2, label = obs.name, color = colors[i])
                     # plt.plot(t1[-1]+t2, x2.all[obs.name], lw = 2, label = obs.name)
                 # plt.annotate(s = "n_cells = %d" % cell, xy = (0.1,0.1), xycoords = "axes fraction", fontsize = 24)
@@ -123,14 +145,16 @@ def run_barcoding_model(n_exp, n_barcodes, n_cell_types):
         all_post_drug_counts.append(post_drug_counts)
 
     print(all_post_drug_counts)
-    np.save("barcoding_data_%dbar%dexp%dstates.npy" % (b, e, s), all_post_drug_counts)
-    # np.save("barcoding_data_1000bar50exp100states.npy", all_post_drug_counts)
+    # np.save("barcoding_data_%dbar%dexp%dstates.npy" % (b, e, s), all_post_drug_counts)
+    np.save("barcoding_data_100bar10exp15states_forpres.npy", all_post_drug_counts)
 
-    # plt.show()
+    plt.show()
 
-states = [5,10,15,20]
-experiments = range(1,3)
-barcodes = [5,10]
+run_barcoding_model(n_exp=1, n_barcodes=10, n_cell_types=10)
+quit()
+states = [15]
+experiments = range(1,11)
+barcodes = [5]
 
 for s in states:
     for e in experiments:
