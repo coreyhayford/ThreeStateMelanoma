@@ -6,17 +6,131 @@ from pysb.simulator import ScipyOdeSimulator
 from pysb.simulator.bng import BngSimulator
 import pandas as pd
 import seaborn as sns
+from sympy.solvers.solvers import nsolve, Symbol
+from sympy.solvers.solveset import nonlinsolve
+import sympy
+from collections import Counter, OrderedDict
+from sympy import log
+import mpmath
+
 
 sns.set(font_scale = 1.25)
 sns.set_style("whitegrid")
+# cols = ['r','b','g','k','y']
+# bins = np.linspace(-0.05,0.05,10)
+# labels = ['1 cell', '1 cell(ish)', '5 cells', '10 cells', '25 cells']
+
+a = np.load("dip_dist_list_ODE.npy")
+b,c,d,e = a[0],a[1],a[2],a[3]
+f = list(np.load("dip_dist_1cell_ODE.npy"))
+print(f)
+print(b)
+print(c)
+print(d)
+print(e)
+
+lists = []
+lists.append(f)
+lists.append(b)
+lists.append(c)
+lists.append(d)
+lists.append(e)
+print(lists)
+# print(b)
+# c = a.append(b)
+
+### Discretizing data into x groups ###
+def get_biased_data(input_data):
+    data_cell = input_data
+    print(data_cell)
+    bins = np.array([-0.06, -0.02, 0.02, 0.06])
+    inds = np.digitize(data_cell, bins)
+    val_counts = Counter(inds)
+    counts = np.array([val_counts[i+1] for i in range(len(val_counts.items()))])
+    # counts_prob = counts/float(np.sum(counts))
+    # dat = []
+    # for z in val_counts.keys():
+    #     dat.append(data_cell[np.equal(inds, z)])
+    return counts
+
+counts = get_biased_data(input_data = np.array(lists[2]))
+print(counts/float(np.sum(counts)))
+# quit()
+
+
+
+# plt.show()
+# # print(bins)
+# quit()
+
+
+
+
+n = 5 # Number of cells per well
+p1 = Symbol('p1')
+p2 = Symbol('p2')
+p3 = Symbol('p3')
+
+
+P1_measured = counts[0]/float(np.sum(counts))
+P2_measured = counts[1]/float(np.sum(counts))
+P3_measured = counts[2]/float(np.sum(counts))
+
+# P1_measured = (1-0.8**5) * 0.7**5 * 0.5**5
+# P2_measured = (1-0.5**5) * 0.7**5
+# P3_measured = 1-0.7**5
+
+P1 = log(1 - (p2 + p3)**n) + n*log(p1+p2) + n*log(p1+p3) - log(P1_measured)
+P2 = log(1 - (p1 + p3)**n) + n*log(p1+p2) - log(P2_measured)
+P3 = log(1 - (p1 + p2)**n) - log(P3_measured)
+
+# P1 = (1 - (p2 + p3)**n) * ((p1 + p2)**n * (p1 + p3)**n) - P1_measured
+# P2 = (1 - (p1 + p3)**n) * ((p1 + p2)**n) - P2_measured
+# P3 = (1 - (p1 + p2)**n) - P3_measured
+# P1 = 1 - P2 - P3 - counts[0]/float(np.sum(counts))
+P4 = p1 + p2 + p3 - 1
+
+# test = sympy.solve([P1-counts_prob[0], P2-counts_prob[1], P3-counts_prob[2]], (p1,p2,p3))
+# print(test)
+# quit()
+
+from sympy.core import S
+
+test = nsolve((P1,P2,P3,P4), (p1,p2,p3), (0.2,0.5,0.3), verify = False)
+print(test)
+print(sum(test))
+# print(nsolve((P1,P2,P3), (p1,p2,p3), (0.2,0.5,0.3)))
+
+
+# for i,vals in enumerate(lists):
+#     sns.distplot(vals, kde=False, color=cols[i], bins=bins, hist_kws={"alpha":0.25}, label=labels[i])
+#     plt.xlabel("DIP Rate")
+#     plt.ylabel("Frequency")
+#     plt.title("LSD Biased DIP Rate Distribution", weight = "bold")
+#     plt.legend()
+#
+# plt.show()
+
+bins = [-0.04,0,0.04]
+init_prob = [0.2,0.5,0.3]
+plt.bar(bins,init_prob,width=0.02, label = "Truth", alpha = 0.5)
+plt.bar(bins,counts/float(np.sum(counts)),width=0.02, label = "LSD", alpha = 0.5)
+plt.bar(bins,test,width=0.02, label = "PDF converted", alpha = 0.5)
+plt.legend(loc = 0)
+plt.xlabel("Simulated DIP Rate")
+plt.ylabel("Probability")
+plt.title("Distribution Comparison", weight = "bold")
+plt.show()
+
+quit()
+
+
 
 # Setting Key Model Parameters
-n_exp = 384
-# n_barcodes = 5
-n_cell_types = 3
-n_cells = 5
-cols = ['r','b','g','y','k']
-
+# n_exp = 384
+# # n_barcodes = 5
+# n_cell_types = 3
+# n_cells = 5
 
 def adjusted_r_squared(r, n, p):
     """
@@ -96,22 +210,22 @@ def LSD(prob, n_exp, n_cell_types, n_cells):
 
     dip_dist = []
 
-    low_dips = -0.06 * np.log(2)
-    high_dips =  0.01 * np.log(2)
+    low_dips = -0.04 * np.log(2)
+    high_dips =  0.04 * np.log(2)
     dips = np.linspace(low_dips, high_dips, n_cell_types)
-    dip_mean = -0.02 * np.log(2)
-    dip_var = 0.01 * np.log(2)
+    # dip_mean = -0.01 * np.log(2)
+    # dip_var = 0.01 * np.log(2)
 
     # Discretize normal distribution of dip rates - used in post drug simulation
-    normal = sp.norm.pdf(dips, dip_mean, dip_var)
-    print(normal)
-    sum = 0
-    for i in range(1, n_cell_types):
-        sum += normal[i] * (dips[i] - dips[i - 1])
-    print(sum)
+    # normal = sp.norm.pdf(dips, dip_mean, dip_var)
+    # print(normal)
+    # sum = 0
+    # for i in range(1, n_cell_types):
+    #     sum += normal[i] * (dips[i] - dips[i - 1])
+    # print(sum)
 
-    normal_hist = normal * (dips[1] - dips[0])
-    print(normal_hist)
+    # normal_hist = normal * (dips[1] - dips[0])
+    # print(normal_hist)
     print(dips)
 
     Model()
@@ -131,9 +245,9 @@ def LSD(prob, n_exp, n_cell_types, n_cells):
     Observable("Obs_All", Cell())
     print(model.observables)
 
-    k_div = 0.025 * np.log(2)
+    k_div = 0.040 * np.log(2)
     [Parameter("k_div_%d" % i, k_div) for i in range(len(dips))]
-    k_death = -dips
+    k_death = k_div-dips
     [Parameter("k_death_%d" % i, k) for i, k in enumerate(k_death)]
     print(model.parameters)
 
@@ -141,55 +255,67 @@ def LSD(prob, n_exp, n_cell_types, n_cells):
           model.parameters["k_div_%d" % i]) for i in range(len(dips))]
     [Rule("Cell%d_Death" % i, Cell(dip="%d" % i) >> None,
           model.parameters["k_death_%d" % i]) for i in range(len(k_death))]
-    print(model.rules)
+    # print(model.rules)
+    # for i in range(n_cell_types):
+    #     print(model.parameters['cellInit_%d' %i])
+    # quit()
+
+    np.random.seed(5)
 
     for exp in range(n_exp):
-
-        num_cells = np.random.poisson(n_cells)
+        # num_cells = np.random.poisson(n_cells)
+        num_cells = 1
         picks = np.random.multinomial(num_cells, prob)
         picks_total = np.sum(picks)
         if picks_total != 0:
-            # ['cellInit_%d' % i for i in range(n_cell_types)] =
-            cellInit_0.value = picks[0]
-            cellInit_1.value = picks[1]
-            cellInit_2.value = picks[2]
-
-            # A0.value = A_init
-            # B0.value = B_init
-            # C0.value = C_init
-
-            k_div_0.value = .025 * np.log(2)
-            k_div_1.value = .025 * np.log(2)
-            k_div_2.value = .025 * np.log(2)
-
-            k_death_0.value = .002 * np.log(2)
-            k_death_1.value = .002 * np.log(2)
-            k_death_2.value = .002 * np.log(2)
-
-            # print cellInit_0, cellInit_1, cellInit_2
-
+            div_death = {}
+            for i in range(n_cell_types):
+                model.parameters['cellInit_%d' %i].value = picks[i]
+                div_death["k_div_%d" %i] = 0.04 * np.log(2)
+                div_death["k_death_%d" %i] = 0.005 * np.log(2)
+        else:
+            continue
+        # print(model.parameters)
         t1 = np.linspace(0, 169, 168)  # 7 days
-        sim1 = ScipyOdeSimulator(model, tspan=t1, verbose=False)
-        x1 = sim1.run()  # returns np.array with species and obs
-        # plt.plot(x1.tout[0], np.log2(x1.all["Obs_All"]), color = cols[exp], lw=2)
+        sim = ScipyOdeSimulator(model, verbose=False)
+        # sim1 = BngSimulator(model, tspan=t1, verbose=False)
+        x1 = sim.run(tspan=t1,
+                     param_values=div_death)  # returns np.array with species and obs
+        # plt.plot(x1.tout[0], np.log2(x1.all["Obs_All"]), color = 'k', lw=2)
+        # plt.plot(x1.tout[0], np.log2(x1.all["Obs_Cell0"]), color = 'b', lw=2)
+        # plt.plot(x1.tout[0], np.log2(x1.all["Obs_Cell1"]), color = 'g', lw=2)
+        # plt.plot(x1.tout[0], np.log2(x1.all["Obs_Cell2"]), color = 'r', lw=2)
+        # print(model.parameters)
+        # quit()
         t2 = np.linspace(0, 336, 337)
-        sim2 = ScipyOdeSimulator(model, tspan=t2, verbose=False)
-        x2 = sim2.run(param_values={"cellInit_0": x1.all["Obs_Cell0"][-1],
-                                    "cellInit_1": x1.all["Obs_Cell1"][-1],
-                                    "cellInit_2": x1.all["Obs_Cell2"][-1],
-                                    "k_death_0": k_death[0],
-                                    "k_death_1": k_death[1],
-                                    "k_death_2": k_death[2]})
+        # sim2 = BngSimulator(model, tspan=t2, verbose=False)
+        # x2 = sim2.run(param_values={"cellInit_{}".format(i): x1.all["Obs_Cell%{}".format(i)][-1] for i in range(n_cell_types),
+        #                             "k_death_{}".format(i): k_death[i] for i in range(n_cell_types)})
+        # print(model.species)
+        # print(x1.species[-1])
+        # for r in model.reactions:
+        #     print(r)
+        x2 = sim.run(tspan=t2,
+                     initials=x1.species[-1],
+                     param_values=[p.value for p in model.parameters])
 
+        # plt.plot(x2.tout[0]+x1.tout[0][-1], np.log2(x2.all["Obs_All"]), color = 'k', lw=2, label = "All")
+        # plt.plot(x2.tout[0]+x1.tout[0][-1], np.log2(x2.all["Obs_Cell0"]), color = 'b', lw=2, label = "Cell0")
+        # plt.plot(x2.tout[0]+x1.tout[0][-1], np.log2(x2.all["Obs_Cell1"]), color = 'g', lw=2, label = "Cell1")
+        # plt.plot(x2.tout[0]+x1.tout[0][-1], np.log2(x2.all["Obs_Cell2"]), color = 'r', lw=2, label = "Cell2")
+        # plt.legend()
+        # plt.show()
         # print x1.all["Obs_Cell0"][-1]
         # print x1.all["Obs_Cell1"][-1]
         # print x1.all["Obs_Cell2"][-1]
 
         print(expt_dip(t_hours=x2.tout[0], assay_vals=np.log2(x2.all["Obs_All"])))
+        print(dips)
 
         dip,std_err,first_tp,intercept = expt_dip(t_hours=x2.tout[0], assay_vals=np.log2(x2.all["Obs_All"]))
 
-        dip_dist.append(dip)
+        if dip is not None:
+            dip_dist.append(dip)
 
         plt.plot(x1.tout[0], np.log2(x1.all["Obs_All"]), '0.5', lw=2)
         plt.plot(x1.tout[0][-1] + x2.tout[0], np.log2(x2.all["Obs_All"]), '0.5', lw=2)
@@ -198,18 +324,27 @@ def LSD(prob, n_exp, n_cell_types, n_cells):
         plt.title("Deterministic LSD trajectories", weight = "bold")
 
     plt.figure("DIP Rate Distribution")
-    sns.distplot(dip_dist, kde=False, color='k', hist_kws={"alpha":0.5})
+    sns.distplot(dip_dist, kde=False, color='k', hist_kws={"alpha":0.5}, bins = 5)
     plt.xlabel("DIP Rate")
     plt.ylabel("Frequency")
     plt.title("LSD Biased DIP Rate Distribution", weight = "bold")
 
-LSD(prob=[0.2,0.5,0.3], n_cell_types=3, n_exp=100, n_cells=50)
-plt.show()
+    return dip_dist
 
+# dd = LSD(prob=[0.2,0.5,0.3], n_cell_types=3, n_exp=384, n_cells=1)
+# np.save("dip_dist_1cell_ODE.npy", dd)
+# dip_list = []
+# num_cells = [1,5,10,25]
+# for nc in num_cells:
+#     dl = LSD(prob=[0.2,0.5,0.3], n_cell_types=3, n_exp=384, n_cells=nc)
+#     dip_list.append(dl)
+    # plt.show()
+
+# np.save("dip_dist_list_ODE.npy", dip_list)
 
 """"" NEXT STEPS
-1. Feed LSD distribution into numerical solver for three states
-2. See if can reproduce input cFP distribution
+1. Feed LSD distribution into numerical solver for three states - X
+2. See if can reproduce input cFP distribution - X
 3. Repeat and extend to more states
 """""
 
