@@ -32,13 +32,13 @@ def declare_parameters():  # Parameter("name_of_par", value)
     Parameter("B0")
     Parameter("C0")
 
-    Parameter("k_div_A", .033)  # np.random.normal(.03, .005) )
-    Parameter("k_div_B", .033)  # np.random.normal(.05,.005) )
-    Parameter("k_div_C", .033)  # np.random.normal(.07,.005) )
+    Parameter("k_div_A")#, .033)  # np.random.normal(.03, .005) )
+    Parameter("k_div_B")#, .033)  # np.random.normal(.05,.005) )
+    Parameter("k_div_C")#, .033)  # np.random.normal(.07,.005) )
 
-    Parameter('k_death_A', .005)
-    Parameter('k_death_B', .005)
-    Parameter('k_death_C', .005)
+    Parameter('k_death_A')#, .005)
+    Parameter('k_death_B')#, .005)
+    Parameter('k_death_C')#, .005)
     #
     # Parameter("k_AB",     0.)
     # Parameter("k_BA",     0.)
@@ -78,6 +78,7 @@ def declare_rules():  # Rule("rule_name", chemical reaction, call name of DIP ra
     Rule("Death_C", C() >> None, k_death_C)
 
 
+def declare_transition_rules():
     Rule("A_to_B", A() >> B(), k_AB)
     Rule("B_to_A", B() >> A(), k_BA)
     Rule("B_to_C", B() >> C(), k_BC)

@@ -8,7 +8,10 @@ barcodes = ["Barcode_%s" %i for i in range(1,1001)]
 
 sns.set(font_scale = 2)
 sns.set_style("whitegrid")
-barcoding_data = np.load("barcoding_data_100bar10exp15states_forpres.npy")
+
+barcoding_data = np.load("barcoding_data_10bar5exp15states0.50spikein.npy")
+
+# barcoding_data = np.load("barcoding_data_100bar10exp15states_forpres.npy")
 # print(barcoding_data)
 # print(len(barcoding_data))
 barcoding_df = pd.DataFrame(barcoding_data)
@@ -129,8 +132,10 @@ df_sort['Relative Count'] = df_sort['Count'] / df_sort['Count'].sum()
 
 print(df_sort)
 
-df_sort.plot(y = 'Relative Count', kind='bar', title = "100 Barcodes over 10 Experiments - 15 states", legend = False)
-plt.plot([0, 100], [0.01, 0.01], "k--", lw = 5)
+df_sort.plot(y = 'Relative Count', kind='bar', title = "10 Barcodes over 5 Experiments - 10 states", legend = False)
+# plt.plot([0, 100], [0.1, 0.1], "k--", lw = 5)
+plt.axhline(y=0.1, linewidth = 4, color = 'black', ls='--')
+plt.ylim(0,1)
 
 # sns.rugplot(df_sort, color="r", axis = 'y', height = 0.01)
 plt.xlabel("Barcodes", weight = "bold")
@@ -139,10 +144,11 @@ plt.xticks([])
 # plt.show()
 # quit()
 
-barcoding_df.plot(kind='bar', stacked = True, title = "100 Barcodes over 10 Experiments - 15 states", legend = True)
+barcoding_df.plot(kind='bar', stacked = True, title = "10 Barcodes over 5 Experiments - 10 states", legend = True)
 plt.xlabel("Barcodes", weight = "bold")
 plt.xticks([])
 plt.ylabel("Count", weight = "bold")
+plt.ylim(0,1000)
 
 plt.show()
 quit()

@@ -48,7 +48,7 @@ for key,value in dict.iteritems():
     # quit()
 # plt.show()
 
-print(distr_values)
+# print(distr_values)
 print(distr_values[0])
 print(type(distr_values[0]))
 quit()

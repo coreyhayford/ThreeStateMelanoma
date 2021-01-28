@@ -36,20 +36,20 @@ def run_LSDspikeIn_model(n_wells, n_cell_types, percent, n_cells):
     low_dips = -0.04
     high_dips = 0.02
     dips = np.linspace(low_dips, high_dips, n_cell_types)
-    dip_mean = -0.01
-    dip_var = 0.01
+    # dip_mean = -0.01
+    # dip_var = 0.01
     # print("DIP RATES")
     # print(dips)
     # print("Death rates")
     # print(-dips+(0.03*np.log(2)))
 
 
-    # Discretize normal distribution of dip rates - used in post drug simulation
-    normal = sp.norm.pdf(dips, dip_mean, dip_var)
-    sum = 0
-    for i in range(1, n_cell_types):
-        sum += normal[i] * (dips[i] - dips[i - 1])
-    normal_hist = normal * (dips[1] - dips[0])
+    # # Discretize normal distribution of dip rates - used in post drug simulation
+    # normal = sp.norm.pdf(dips, dip_mean, dip_var)
+    # sum = 0
+    # for i in range(1, n_cell_types):
+    #     sum += normal[i] * (dips[i] - dips[i - 1])
+    # normal_hist = normal * (dips[1] - dips[0])
 
     Model()
     [Monomer("Cell", ['dip'], {'dip': ["%d" %i for i in range(n_cell_types)]})]

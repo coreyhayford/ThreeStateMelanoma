@@ -10,8 +10,10 @@ from sympy.solvers.solvers import nsolve, Symbol
 from sympy.solvers.solveset import nonlinsolve
 import sympy
 from collections import Counter, OrderedDict
-from sympy import log
+from sympy import log, Eq, pprint
+from sympy import symbols, Function, Idx
 import mpmath
+import pprint
 
 
 sns.set(font_scale = 1.25)
@@ -23,11 +25,11 @@ sns.set_style("whitegrid")
 a = np.load("dip_dist_list_ODE.npy")
 b,c,d,e = a[0],a[1],a[2],a[3]
 f = list(np.load("dip_dist_1cell_ODE.npy"))
-print(f)
-print(b)
-print(c)
-print(d)
-print(e)
+# print(f)
+# print(b)
+# print(c)
+# print(d)
+# print(e)
 
 lists = []
 lists.append(f)
@@ -35,36 +37,68 @@ lists.append(b)
 lists.append(c)
 lists.append(d)
 lists.append(e)
-print(lists)
-# print(b)
-# c = a.append(b)
 
-### Discretizing data into x groups ###
-def get_biased_data(input_data):
-    data_cell = input_data
-    print(data_cell)
-    bins = np.array([-0.06, -0.02, 0.02, 0.06])
-    inds = np.digitize(data_cell, bins)
-    val_counts = Counter(inds)
-    counts = np.array([val_counts[i+1] for i in range(len(val_counts.items()))])
-    # counts_prob = counts/float(np.sum(counts))
-    # dat = []
-    # for z in val_counts.keys():
-    #     dat.append(data_cell[np.equal(inds, z)])
-    return counts
-
-counts = get_biased_data(input_data = np.array(lists[2]))
-print(counts/float(np.sum(counts)))
-# quit()
+# counts = get_biased_data(input_data = np.array(lists[2]))
+# cFP_counts = get_biased_data(input_data = np.load('cFP_MGH_Erl.npy'), bins=np.array([-0.05, -0.015, -0.005, 0.02]))
 
 
+### Discretizing data into x groups -- BETTER VERSION ###
+def get_biased_data(input_data, num_bins, low_lim, high_lim):
+    # input_data = np.load('LSD_MGH_Erl.npy')
+    # num_bins = 40
+    bins=np.linspace(low_lim, high_lim, num_bins+1)
+    inds = pd.Series(np.digitize(input_data, bins))
+    keys = inds.value_counts().keys()
 
-# plt.show()
-# # print(bins)
-# quit()
+    all_keys = range(num_bins)
+    all_vals = []
+    for key in all_keys:
+        if key in keys:
+            all_vals.append(inds.value_counts()[key])
+        else:
+            all_vals.append(0)
+    all_vals_prop = np.array(all_vals)/float(np.sum(all_vals))
+    counts_df = pd.DataFrame(
+        {'bin_num': all_keys,
+         'num_events': all_vals,
+         'prop_events': all_vals_prop}
+    )
+    return counts_df
 
 
+# n = 5 # Number of cells per well
+LSD_counts = get_biased_data(np.load('LSD_MGH_Erl.npy'), 40, -0.03, 0.02)
+num_states = 40 #len(bins)
+# p_all = list(symbols('p0:%d'%num_states))
 
+p = sympy.IndexedBase('p')
+i = Symbol('i', integer = True)
+j = Symbol('j')
+n = Symbol('n')
+# m = Symbol('m')
+m = 14
+# e = Eq(n!=3, 1)
+
+p_all_measured = [LSD_counts['prop_events'][z] for z in range(num_states)]
+
+test = sympy.Sum(p[i]**n, (i, 0, m-1))
+test1 = sympy.Sum(p[i]**n, (i, m+1, num_states-1))
+
+# test2 = sympy.Product(sympy.Sum())
+print(test.doit())
+print(test1.doit())
+print(1-(test.doit() + test1.doit()))
+quit()
+ls = list(map(chr, range(num_states)))
+print(ls)
+quit()
+f = lambda N: sum(p_all[N], ())
+
+eq_p1 = sympy.Sum(p_all[p], (p, min(range(num_states)), max(range(num_states))))
+
+# eq_p1 = mpmath.nsum(lambda p: p_all[p], [min(range(num_states)), max(range(num_states))])
+print(eq_p1)
+quit()
 
 n = 5 # Number of cells per well
 p1 = Symbol('p1')
@@ -72,9 +106,10 @@ p2 = Symbol('p2')
 p3 = Symbol('p3')
 
 
-P1_measured = counts[0]/float(np.sum(counts))
-P2_measured = counts[1]/float(np.sum(counts))
-P3_measured = counts[2]/float(np.sum(counts))
+
+P1_measured = LSD_counts[0]/float(np.sum(LSD_counts))
+P2_measured = LSD_counts[1]/float(np.sum(LSD_counts))
+P3_measured = LSD_counts[2]/float(np.sum(LSD_counts))
 
 # P1_measured = (1-0.8**5) * 0.7**5 * 0.5**5
 # P2_measured = (1-0.5**5) * 0.7**5
@@ -96,9 +131,10 @@ P4 = p1 + p2 + p3 - 1
 
 from sympy.core import S
 
-test = nsolve((P1,P2,P3,P4), (p1,p2,p3), (0.2,0.5,0.3), verify = False)
+test = nsolve((P1,P2,P3,P4), (p1,p2,p3), (0.2,0.7,0.1), verify = False)
 print(test)
 print(sum(test))
+quit()
 # print(nsolve((P1,P2,P3), (p1,p2,p3), (0.2,0.5,0.3)))
 
 
@@ -114,12 +150,13 @@ print(sum(test))
 bins = [-0.04,0,0.04]
 init_prob = [0.2,0.5,0.3]
 plt.bar(bins,init_prob,width=0.02, label = "Truth", alpha = 0.5)
-plt.bar(bins,counts/float(np.sum(counts)),width=0.02, label = "LSD", alpha = 0.5)
+plt.bar(bins,LSD_counts/float(np.sum(LSD_counts)),width=0.02, label = "LSD", alpha = 0.5)
 plt.bar(bins,test,width=0.02, label = "PDF converted", alpha = 0.5)
 plt.legend(loc = 0)
 plt.xlabel("Simulated DIP Rate")
 plt.ylabel("Probability")
-plt.title("Distribution Comparison", weight = "bold")
+plt.title("Conversion of Biased Probability Distribution", weight = "bold")
+plt.savefig('LSD_to_cFP_3state_ODE.pdf', dpi = 600)
 plt.show()
 
 quit()
@@ -348,3 +385,17 @@ def LSD(prob, n_exp, n_cell_types, n_cells):
 3. Repeat and extend to more states
 """""
 
+### Discretizing data into x groups ###
+# def get_biased_data(input_data, bins):
+#     data_cell = input_data
+#     # print(data_cell)
+#     bins = bins
+#     # bins = np.array([-0.06, -0.02, 0.02, 0.06])
+#     inds = np.digitize(data_cell, bins)
+#     val_counts = Counter(inds)
+#     counts = np.array([val_counts[i+1] for i in range(len(val_counts.items()))])
+#     # counts_prob = counts/float(np.sum(counts))
+#     # dat = []
+#     # for z in val_counts.keys():
+#     #     dat.append(data_cell[np.equal(inds, z)])
+#     return counts

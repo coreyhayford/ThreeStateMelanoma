@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import scipy.stats as sp
-import plotly.graph_objs as go
-import plotly.plotly as py
 
 import os
 import re
@@ -23,13 +21,12 @@ for filename in os.listdir(path):
         print filename
         print re.findall("\d+", filename)
         bd_nums.append(re.findall("\d+", filename))
-        # dict["bd%dB%dE%dS" % re.findall("\d+", filename)] = "Hello"
+# dict["bd%dB%dE%dS" % re.findall("\d+", filename)] = "Hello"
 print(bd_nums)
 
 for bd_num in bd_nums:
     dict["bd%sB%sE%sS" % tuple(bd_num)] = np.load("barcoding_data_%sbar%sexp%sstates.npy" % tuple(bd_num))
-        # with np.load(os.path.join(path, filename))
-
+# with np.load(os.path.join(path, filename))
 
 bd_1000B100E100S = np.load("barcoding_data_1000bar100exp100states.npy")
 

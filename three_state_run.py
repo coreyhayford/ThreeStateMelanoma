@@ -95,9 +95,6 @@ three_state.declare_functions()
 # for exp in model.expressions:
 #     print exp
 #
-# generate_equations(model, verbose=True)
-# from pysb.generator.bng import BngGenerator
-# print BngGenerator(model).get_content()
 #
 # for i in range(len(model.odes)):
 #     print str(i)+":", model.odes[i]
